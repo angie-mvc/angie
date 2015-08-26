@@ -26,7 +26,16 @@ Angie is an MVC that runs in NodeJS designed with AngularJS in mind. It allows y
 
 Angie is simple to use, flexible, and lightweight and offers a holistic approach to JavaScript across the stack.
 
-For more details on how to get started, please see the [Quickstart](#quickstart) section. For a list of Frequently Asked Questions, please see the [FAQ](https://github.com/benderTheCrime/angie/blob/master/FAQ.md "FAQ") and the [CHANGELOG](https://github.com/benderTheCrime/angie/blob/master/CHANGELOG.md "CHANGELOG") for an up to date list of changes. Contributors to this Project are outlined in the [CONTRIBUTORS](https://github.com/benderTheCrime/angie/blob/master/CONTRIBUTORS.md "CONTRIBUTORS") file. AngularJS is in no way used or affiliated with this project.
+For more details on how to get started, please see the [Quickstart](#quickstart) section. For a list of Frequently Asked Questions, please see the [FAQ](https://github.com/benderTheCrime/angie/blob/master/FAQ.md "FAQ") and the [CHANGELOG](https://github.com/benderTheCrime/angie/blob/master/CHANGELOG.md "CHANGELOG") for an up to date list of changes. AngularJS is in no way used or affiliated with this project.
+
+
+### Contributors
+It's easy to contribute to the Angie framework:
+    - Feature requests should be made through the [issues](https://github.com/benderTheCrime/angie-log/issues "issues") section of this repository.
+    - Issues should be logged through the [issues](https://github.com/benderTheCrime/angie-log/issues "issues") tab as well.
+    - Ancillary functionality can be added to Angie in a package. You may use the [Angie Package Template](https://github.com/benderTheCrime/angie-package-template "Angie Package Template") as a bootstrapped dependency package template.
+
+Contributors to this Project are outlined in the [CONTRIBUTORS](https://github.com/benderTheCrime/angie/blob/master/CONTRIBUTORS.md "CONTRIBUTORS") file.
 
 ### Features
 #### Write components &amp; modules like you would in AngularJS
