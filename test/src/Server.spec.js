@@ -1,16 +1,16 @@
 // Test Modules
-import {assert, expect} from        'chai';
-import simple, {mock, spy} from     'simple-mock';
-import $LogProvider from            'angie-log';
+import { assert, expect } from      'chai';
+import simple, { mock, spy } from   'simple-mock';
 
 // System Modules
 import yargs from                   'yargs';
 import http from                    'http';
 import https from                   'https';
+import $LogProvider from            'angie-log';
 
 // Angie Modules
 import app from                     '../../src/Angie';
-import {$$server} from              '../../src/Server';
+import { $$server } from            '../../src/Server';
 import $Request from                '../../src/services/$Request';
 import * as $Responses from         '../../src/services/$Response';
 

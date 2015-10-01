@@ -5,25 +5,24 @@
  */
 
 // System Modules
-import {
-    cyan,
-    blue,
-    bold,
-    red
-} from  'chalk';
+import chalk from           'chalk';
+import $LogProvider from    'angie-log';
 
-class $$InvalidConfigError extends Error {
+class $$InvalidConfigError {
     constructor() {
-        super(
-            'Invalid application configuration. Check your ' +
-            blue('Angiefile.json')
-        );
+        const msg = 'Invalid application configuration. Check your ' +
+            chalk.cyan('AngieFile');
+
+        $LogProvider.error(msg);
+        return new Error(msg);
     }
 }
 
 class $$InvalidModuleConfigError extends SyntaxError {
     constructor(type = 'directive', name) {
-        super(bold(red(`Invalid configuration for ${type} ${cyan(name)}`)));
+        super(chalk.bold(
+            chalk.red(`Invalid configuration for ${type} ${chalk.cyan(name)}`)
+        ));
     }
 }
 

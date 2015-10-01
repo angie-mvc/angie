@@ -5,20 +5,23 @@
  */
 
 // System Modules
-import fs from                                          'fs';
-import {magenta, blue} from                             'chalk';
-import $LogProvider from                                'angie-log';
-import {$injectionBinder} from                          'angie-injector';
+import fs from                          'fs';
+import { magenta, blue } from           'chalk';
+import $LogProvider from                'angie-log';
+import {$injectionBinder} from          'angie-injector';
 
 // Angie Modules
-import {config} from                                    './Config';
-import {$scope} from                                    './controllers/$ScopeProvider';
-import $RouteProvider from                              './factories/$RouteProvider';
-import $CacheFactory from                               './factories/$CacheFactory';
-import $compile from                                    './factories/$Compile';
-import {$templateCache, $resourceLoader} from           './factories/$TemplateCache';
-import {$StringUtil} from                               './util/Util';
-import * as $ExceptionsProvider from                    './util/$ExceptionsProvider';
+import { config } from                  './Config';
+import { $scope } from                  './controllers/$ScopeProvider';
+import $RouteProvider from              './factories/$RouteProvider';
+import $CacheFactory from               './factories/$CacheFactory';
+import $compile from                    './factories/$Compile';
+import {
+    $templateCache,
+    $resourceLoader
+} from                                  './factories/$TemplateCache';
+import { $StringUtil } from             './util/Util';
+import * as $ExceptionsProvider from    './util/$ExceptionsProvider';
 
 const CWD = process.cwd(),
     $$require = v => {
@@ -57,6 +60,8 @@ class Angie {
         this.directives = {};
         this.$dependencies = [];
         this.$$registry = {};
+
+        this.$$config = config;
     }
 
     /**
@@ -459,18 +464,18 @@ class Angie {
 
 let app = global.app;
 if (!app) {
-     app = global.app = new Angie();
+    app = global.app = new Angie();
 
     // Require in any further external components
     // Constants
     app.constant('ANGIE_TEMPLATE_DIRS', [
         `${__dirname}/../templates`
     ].concat(
-        (config.templateDirs || []).map(mapAssetDirectoryDeclarations)
+        config.templateDirs.map(mapAssetDirectoryDeclarations)
     )).constant('ANGIE_STATIC_DIRS', [
         `${__dirname}/../static`
     ].concat(
-        (config.staticDirs || []).map(mapAssetDirectoryDeclarations)
+        config.staticDirs.map(mapAssetDirectoryDeclarations)
     )).constant('RESPONSE_HEADER_MESSAGES', {
         200: 'Ok',
         404: 'File Not Found',

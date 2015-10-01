@@ -132,7 +132,7 @@ class $FileUtil {
      * @since 0.2.4
      * @param {string} root The root directory in which to find files
      * @param {string} target The desired file name
-     * @returns {string} The content of the file
+     * @returns {string} The absolute path to the file
      * @example $FileUtil.find(process.cwd(), 'test');
      */
     static find(root, target) {
@@ -149,11 +149,11 @@ class $FileUtil {
             }
         };
 
-        let template;
+        let path;
         if (target.indexOf('/') > -1) {
 
             // We can just search the root for the file
-            template = `${root}/${target}`;
+            path = `${root}/${target}`;
         } else {
 
             // If file has no slash, search in all directories
@@ -167,9 +167,9 @@ class $FileUtil {
                         // We have a directory and we need to recurse through it
                         fn(`${root}/${file}`, target);
                     } else if (file.indexOf(target) > -1) {
-                        template = `${root}/${target}`;
+                        path = `${root}/${target}`;
                     }
-                    if (template) {
+                    if (path) {
                         break;
                     }
                 }
@@ -179,14 +179,13 @@ class $FileUtil {
             fn(root, target);
         }
 
-        // Check to see that the 'template' we found is an actual file
+        // Check to see that the path we found is an actual file
         if (
-            (template || template === '') &&
-            fileDirectoryExists(template, 'File')
+            (path || path === '') &&
+            fileDirectoryExists(path, 'File')
         ) {
-            return template;
+            return path;
         }
-        return undefined;
     }
 }
 

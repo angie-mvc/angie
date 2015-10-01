@@ -4,6 +4,9 @@
  * @date 8/16/2015
  */
 
+// We need to require this before anything else
+import './Config';
+
 // System Modules
 import { argv } from                'yargs';
 import { exec } from                'child_process';
@@ -11,7 +14,6 @@ import { gray, bold } from          'chalk';
 import $LogProvider from            'angie-log';
 
 // Angie Modules
-import Config from                  './Config';
 import $$createProject from         './util/scaffold/project';
 import {
     $$watch,
@@ -37,13 +39,13 @@ if (argv.help || argv.h) {
             help();
             break;
         case 'server':
-            requiresConfig($$server);
+            $$server(args);
             break;
         case 'watch':
-            requiresConfig($$watch);
+            $$watch(args);
             break;
         case 's':
-            requiresConfig($$server);
+            $$server(args);
             break;
         case 'cluster':
             break;
@@ -54,10 +56,10 @@ if (argv.help || argv.h) {
             });
             break;
         case 'syncdb':
-            requiresConfig(require.bind(null, 'angie-orm'));
+            require('angie-orm');
             break;
         case 'migrate':
-            requiresConfig(require.bind(null, 'angie-orm'));
+            require('angie-orm');
             break;
         case 'test':
             runTests();
@@ -68,17 +70,6 @@ if (argv.help || argv.h) {
         default:
             help();
     }
-}
-
-// Wrapper function for services which require configs to be loaded
-function requiresConfig(fn) {
-
-    // Fetch configs
-    return new Config().then(function() {
-        return typeof fn === 'function' ? fn(args) : args;
-    }, function() {
-        process.exit(1);
-    });
 }
 
 function runTests() {

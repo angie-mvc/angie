@@ -31,7 +31,6 @@ Angie is simple to use, flexible, and lightweight and offers a holistic approach
 
 For more details on how to get started, please see the [Quickstart](#quickstart) section. For a list of Frequently Asked Questions, please see the [FAQ](https://github.com/angie-framework/angie/blob/master/md/FAQ.md "FAQ") and the [CHANGELOG](https://github.com/angie-framework/angie/blob/master/md/CHANGELOG.md "CHANGELOG") for an up to date list of changes. AngularJS is in no way used or affiliated with this project.
 
-
 ### Contributors
 It's easy to contribute to the Angie Framework:
     - Feature requests should be made through the [issues](https://github.com/angie-framework/angie-injector/issues "issues") section of this repository.

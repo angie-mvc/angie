@@ -13,50 +13,79 @@ import { $$InvalidConfigError } from    './util/$ExceptionsProvider';
 
 let config = {};
 
+/**
+ * @desc Instantiates the class that loads the AngieFile configs. This is an
+ * internal class and the very first part of the application that is loaded.
+ * None of the application will load if the AngieFile is missing or invalid.
+ * @since 0.0.1
+ * @access private
+ */
 class Config {
+
+    /**
+     * @desc Loads the AngieFile by name and parses its content
+     * @since 0.0.1
+     * @access private
+     */
     constructor() {
-        if (Object.keys(config).length === 0) {
-            return new Promise(function(resolve, reject) {
 
-                // Use the file finder to check against filetype
-                let fileNames = [
-                        'angiefile',
-                        'angieFile',
-                        'Angiefile',
-                        'AngieFile'
-                    ],
-                    acceptedFileNames = [],
-                    file;
+        // Define the possible names for our config
+        let fileNames = [
+                'angiefile',
+                'angieFile',
+                'Angiefile',
+                'AngieFile'
+            ],
+            acceptedFileNames = [],
+            file,
+            ext,
+            content;
+        fileNames.forEach(function(name) {
 
-                fileNames.forEach(function(name) {
-                    acceptedFileNames.push(`${name}.json`);
-                    acceptedFileNames.push(`${name}.js`);
-                    acceptedFileNames.push(`${name}.es6`);
-                });
+            // Add .es6 just in case we have lingering .es6 file users
+            acceptedFileNames.push(`${name}.json`, `${name}.js`, `${name}.es6`);
+        });
 
-                acceptedFileNames.forEach(function(name) {
-                    let tmpFile = $FileUtil.find(process.cwd(), name);
-                    if (tmpFile) {
-                        file = tmpFile;
-                    }
-                });
+        // Cycle through all of the possible filenames, stopping on the first
+        // match
+        for (let i = acceptedFileNames.length - 1; i >= 0; --i) {
 
-                try {
-                    resolve(fs.readFileSync(file, 'utf8'));
-                } catch(e) {
-                    reject(e);
-                }
-            }).then(function(stdout) {
-                config = JSON.parse(stdout);
-                if (global.app) {
-                    global.app.$$config = Object.freeze(config);
-                }
-            }).catch(() => { throw new $$InvalidConfigError(); });
-        } else {
-            return new Promise(() => arguments[0]());
+            // Check to see if we can find the absolute path to our configs
+            file = $FileUtil.find(process.cwd(), acceptedFileNames[ i ]);
+            if (file) {
+
+                // Get the file extension, so we know how to parse the configs
+                ext = file.split('.').pop();
+                break;
+            }
+        }
+
+        try {
+            console.log('TEST', ext, file);
+            if (ext === 'json') {
+                config = JSON.parse(fs.readFileSync(file, 'utf8'));
+            } else {
+                config = require(file);
+            }
+        } catch(e) {
+            console.log(e);
+            throw new $$InvalidConfigError();
+        } finally {
+            if (Object.keys(config).length) {
+
+                // Set the template and static dirs to something if they do not
+                // exist
+                config.templateDirs = config.templateDirs || [];
+                config.staticDirs = config.staticDirs || [];
+            } else {
+                throw new $$InvalidConfigError();
+            }
         }
     }
 }
+
+// Instantiate application configs based on AngieFile
+new Config();
 
 export default Config;
 export { config };
