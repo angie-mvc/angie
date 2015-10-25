@@ -13,7 +13,7 @@ import { $injectionBinder } from    'angie-injector';
 // Angie Modules
 import { config } from              './Config';
 import { $scope } from              './controllers/$ScopeProvider';
-import $RouteProvider from          './factories/$RouteProvider';
+import $Routes from                 './factories/routes';
 import $CacheFactory from           './factories/$CacheFactory';
 import $compile from                './factories/$Compile';
 import {
@@ -21,10 +21,11 @@ import {
     $resourceLoader
 } from                              './factories/$TemplateCache';
 import * as $Exceptions from        './services/$Exceptions';
+import $MimeType from               './services/mime-type';
 import $$ngieIgnoreFactory from     './directives/ngie-ignore';
 import $$ngieRepeatFactory from     './directives/ngie-repeat';
 import $$ngieIfFactory from         './directives/ngie-if';
-import { $StringUtil } from         './util/Util';
+import { $StringUtil } from         './util/util';
 
 
 const CWD = process.cwd(),
@@ -509,7 +510,7 @@ if (!app) {
     });
 
     // Factories
-    app.factory('$Routes', $RouteProvider)
+    app.factory('$Routes', $Routes)
         .factory('$Cache', $CacheFactory)
         .factory('$Log', $LogProvider)
         .factory('$compile', $compile)
@@ -517,6 +518,7 @@ if (!app) {
 
     // Services
     app.service('$Exceptions', $Exceptions)
+        .service('$MimeType', $MimeType)
         .service('$scope', $scope)
         .service('$templateCache', $templateCache);
 

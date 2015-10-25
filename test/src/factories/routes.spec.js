@@ -7,9 +7,9 @@ import $LogProvider from            'angie-log';
 
 // Angie Modules
 const TEST_ENV =                    global.TEST_ENV || 'src',
-    $Routes =                       require(`../../../${TEST_ENV}/factories/$RouteProvider`);
+    $Routes =                       require(`../../../${TEST_ENV}/factories/routes`);
 
-describe('$RouteProvider', function() {
+describe('$Routes', function() {
     describe('when', function() {
         before(() => $Routes.$$clear());
         afterEach(() => $Routes.$$clear());
@@ -98,7 +98,23 @@ describe('$RouteProvider', function() {
                     routes: {
                         regExp: {
                             '/[A-z]+.?/': {
-                                template: 'test'
+                                template: 'test',
+                                flags: ''
+                            }
+                        }
+                    }
+                });
+            });
+            it('test RegExp-based url path with flags', function() {
+                $Routes.when(/[A-z]+.?/gi, {
+                    template: 'test'
+                });
+                expect($Routes.fetch()).to.deep.eq({
+                    routes: {
+                        regExp: {
+                            '/[A-z]+.?/gi': {
+                                template: 'test',
+                                flags: 'gi'
                             }
                         }
                     }
@@ -115,10 +131,12 @@ describe('$RouteProvider', function() {
                     routes: {
                         regExp: {
                             '/test/': {
-                                template: 'test'
+                                template: 'test',
+                                flags: ''
                             },
                             '/test\\/test/': {
-                                template: 'test'
+                                template: 'test',
+                                flags: ''
                             }
                         }
                     }
@@ -135,7 +153,29 @@ describe('$RouteProvider', function() {
                     routes: {
                         regExp: {
                             '/test\\/test/': {
-                                template: 'test'
+                                template: 'test',
+                                flags: ''
+                            }
+                        },
+                        test: {
+                            template: 'test'
+                        }
+                    }
+                });
+            });
+            it('test string-based regex child url path with flags', function() {
+                $Routes.when('test', {
+                    template: 'test',
+                    '/test/gi': {
+                        template: 'test'
+                    }
+                });
+                expect($Routes.fetch()).to.deep.eq({
+                    routes: {
+                        regExp: {
+                            '/test\\/test/gi': {
+                                template: 'test',
+                                flags: 'gi'
                             }
                         },
                         test: {
@@ -155,42 +195,49 @@ describe('$RouteProvider', function() {
                     routes: {
                         regExp: {
                             '/test/': {
-                                template: 'test'
+                                template: 'test',
+                                flags: ''
                             },
                             '/test\\/test/': {
-                                template: 'test'
+                                template: 'test',
+                                flags: ''
                             }
                         }
                     }
                 });
             });
-            it('test regex-based regex child url path inherits Controller', function() {
-                $Routes.when(/test/, {
-                    template: 'test',
-                    Controller: 'test',
-                    '/test/': {
-                        template: 'test'
-                    }
-                });
-                expect($Routes.fetch()).to.deep.eq({
-                    routes: {
-                        regExp: {
-                            '/test/': {
-                                template: 'test',
-                                Controller: 'test'
-                            },
-                            '/test\\/test/': {
-                                template: 'test',
-                                Controller: 'test'
+            it(
+                'test regex-based regex child url path inherits Controller',
+                function() {
+                    $Routes.when(/test/, {
+                        template: 'test',
+                        Controller: 'test',
+                        '/test/': {
+                            template: 'test'
+                        }
+                    });
+                    expect($Routes.fetch()).to.deep.eq({
+                        routes: {
+                            regExp: {
+                                '/test/': {
+                                    template: 'test',
+                                    Controller: 'test',
+                                    flags: ''
+                                },
+                                '/test\\/test/': {
+                                    template: 'test',
+                                    Controller: 'test',
+                                    flags: ''
+                                }
                             }
                         }
-                    }
-                });
-            });
+                    });
+                }
+            );
         });
     });
-    describe('$stringsToRegExp', function() {
-        let regExp = $Routes.$stringsToRegExp;
+    describe('$$stringsToRegExp', function() {
+        let regExp = $Routes.$$stringsToRegExp;
         it('test convert strings to RegExp', function() {
             expect(regExp('test')).to.deep.eq(/test/);
             expect(regExp('test', 'test')).to.deep.eq(/test\/test/);

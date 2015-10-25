@@ -18,7 +18,7 @@ import chalk, {
 import $LogProvider from                'angie-log';
 
 // Angie Modules
-import { $StringUtil } from             '../Util';
+import { $StringUtil } from             '../util';
 
 const p = process,
       breen = (v) => bold(green(v));

@@ -4,7 +4,7 @@ import simple, { mock } from        'simple-mock';
 
 // Angie Modules
 const TEST_ENV =                    global.TEST_ENV || 'src',
-    Util =                          require(`../../../${TEST_ENV}/util/Util`),
+    Util =                          require(`../../../${TEST_ENV}/util/util`),
     $Util =                         Util.default,
     $StringUtil =                   Util.$StringUtil;
 

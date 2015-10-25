@@ -9,7 +9,7 @@ import fs from                          'fs';
 
 // Angie Modules
 import { $$InvalidConfigError } from    './services/$Exceptions';
-import { $FileUtil } from               './util/Util';
+import { $FileUtil } from               './util/util';
 
 let config = {};
 

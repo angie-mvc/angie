@@ -3,7 +3,7 @@ import { expect } from              'chai';
 
 // Angie Modules
 const TEST_ENV =                    global.TEST_ENV || 'src',
-    $MimeType =                     require(`../../../${TEST_ENV}/util/$MimeTypeProvider`);
+    $MimeType =                     require(`../../../${TEST_ENV}/services/mime-type`);
 
 describe('$MimeTypeProvider', function() {
     describe('$$', function() {

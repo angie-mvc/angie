@@ -13,7 +13,7 @@ import {
     $$templateLoader,
     $resourceLoader
 } from                              '../../../src/factories/$TemplateCache';
-import { $FileUtil } from           '../../../src/util/Util';
+import { $FileUtil } from           '../../../src/util/util';
 
 describe('$TemplateCache', function() {
     describe('$$templateLoader', function() {

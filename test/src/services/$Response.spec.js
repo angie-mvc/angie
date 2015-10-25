@@ -18,7 +18,7 @@ import $Response, {
     ErrorResponse,
     $CustomResponse
 } from                                  '../../../src/services/$Response';
-import { $FileUtil } from               '../../../src/util/Util';
+import { $FileUtil } from               '../../../src/util/util';
 
 describe('$Response', function() {
     it('constructor', function() {

@@ -9,9 +9,9 @@ import url from                     'url';
 import { Form } from                'multiparty';
 
 // Angie Modules
-import { default as $Routes } from  '../factories/$RouteProvider';
+import $Routes from                 '../factories/routes';
 import * as $Responses from         './$Response';
-import $Util, { $StringUtil } from  '../util/Util';
+import $Util, { $StringUtil } from  '../util/util';
 
 /**
  * @desc The $Request class processes all of the incoming Angie requests. It
@@ -71,8 +71,11 @@ class $Request {
                 $StringUtil.removeTrailingLeadingSlashes(regExpRoutes[ i ]),
 
                 // Cast the string key of the routes.regExp object as a
-                // RegExp obj
-                pattern = new RegExp(regExpRoute);
+                // RegExp object and add any matching flags
+                pattern = new RegExp(
+                    regExpRoute,
+                    this.routes.regExp[ regExpRoutes[ i ] ].flags
+                );
 
             if (pattern.test(this.path)) {
                 this.route = this.routes.regExp[ regExpRoutes[ i ] ];

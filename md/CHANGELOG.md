@@ -2,6 +2,13 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+### [0.4.5] - 2015-10-25
+#### Changed
+- Exposed `$MimeType` as a service
+- Changed the name of the "Util.js" file to "util.js"
+- Added the option to start Angie as a clustered application by calling the `angie cluster` command
+- Added support for flags on RegExp routes
+
 #### [0.4.4] - 2015-10-19
 ##### Added/Changed/Fixed
 - Refactored the `$ExceptionsProvider` to `$Exceptions` and properly placed it in the services directory

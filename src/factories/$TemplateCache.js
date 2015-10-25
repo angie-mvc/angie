@@ -14,7 +14,7 @@ import $CacheFactory from           './$CacheFactory';
 import {
     $StringUtil,
     $FileUtil
-} from                              '../util/Util';
+} from                              '../util/util';
 
 class $TemplateCache extends $CacheFactory {
     constructor() {

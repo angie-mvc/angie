@@ -1,21 +1,22 @@
 /**
- * @module $RouteProvider.js
+ * @module routes.js
  * @author Joe Groseclose <@benderTheCrime>
  * @date 8/16/2015
  */
 
 // System Modules
-import $LogProvider from        'angie-log';
+import $LogProvider from            'angie-log';
 
 // Angie Modules
-import { $StringUtil } from     '../util/Util';
+import $Util, { $StringUtil } from  '../util/util';
 
 const IGNORE_KEYS = [
     'Controller',
     'template',
     'templatePath',
     'serializers',
-    'renderer'
+    'renderer',
+    'flags'
 ];
 let routes = {
         '/': {
@@ -31,21 +32,18 @@ let routes = {
     otherwise;
 
 /**
- * @desc $RouteProvider is provided to any service, Controller, directive, Model,
- * or view which has included it as an argument as ""$Routes"
- *
- * It can also be referenced as `app.services.$Routes` or imported as
- * '$RouteProvider' from the Angie Path.
+ * @desc $Routes is provided to any service, Controller, directive, Model,
+ * or view which has included it as an argument as "$Routes".
  * @todo use Symbols for RegExp store
  * @since 0.0.1
  */
-class $RouteProvider {
+class $Routes {
 
     /**
      * @desc Sets up a route as a possible endpoint in an Angie application.
      * @since 0.0.1
      * @param {string|Object} str String or RegExp to denote the endpoint
-     * path
+     * path. Supports RegExp flags
      * @param {Object} obj
      * @param {?string} obj.templatePath Optional template path
      * @param {?string} obj.template Optional template html
@@ -76,8 +74,10 @@ class $RouteProvider {
                 routes.regExp = {};
             }
 
+            // We have to deliberately strip off the flags
+
             // Set a RegExp route
-            routes.regExp[ path ] = obj;
+            routes.regExp[ path ] = $Util._extend(obj, { flags: path.flags });
         } else {
 
             // Set a string route
@@ -106,7 +106,7 @@ class $RouteProvider {
 
                     // Check to see if we previously had or now have a path with
                     // RegExp
-                    childPath = $RouteProvider.$stringsToRegExp(
+                    childPath = this.$$stringsToRegExp(
                         path,
                         $StringUtil.removeTrailingLeadingSlashes(key)
                     );
@@ -123,7 +123,7 @@ class $RouteProvider {
                 }
 
                 // Set a route child object
-                $RouteProvider.when(childPath, childObj);
+                this.when(childPath, childObj);
             }
 
             // Strip the child from the original route object
@@ -163,7 +163,7 @@ class $RouteProvider {
      * @access public
      */
     static fetch() {
-        let obj = { routes: routes };
+        let obj = { routes };
         if (otherwise) {
             obj.otherwise = otherwise;
         }
@@ -189,13 +189,22 @@ class $RouteProvider {
      * @param {string|object} str Arguments of strings or RegExp literals
      * @returns {object} Concatenated RegExps joined by "/"
      * @access private
-     * @example var regExp = $Routes.$stringsToRegExp(/test/, test);
+     * @example var regExp = $Routes.$$stringsToRegExp(/test/, test);
      *     regExp.test('test/test') === true;
      */
-    static $stringsToRegExp() {
-        return new RegExp(Array.prototype.slice.call(arguments).map((v) =>
-            $StringUtil.removeTrailingLeadingSlashes(v.toString())
-        ).join('\\/'));
+    static $$stringsToRegExp() {
+        const args = Array.prototype.slice.call(arguments).map(
+                v => $StringUtil.removeTrailingLeadingSlashes(v.toString())
+            ),
+            flags = args.slice(-1)[ 0 ],
+
+            // We need to unitize the last matching string pair here
+            flagArr = flags.split(/(\/)/),
+            flagStr = flagArr.slice(-1)[ 0 ].match(/([giym]{0,4})/)[ 1 ];
+
+        // Replace the clause in the last part of the passed array
+        args[ args.length - 1 ] = flagArr[ 0 ];
+        return new RegExp(args.join('\\/'), flagStr);
     }
 
     /**
@@ -235,4 +244,4 @@ class $RouteProvider {
     }
 }
 
-export default $RouteProvider;
+export default $Routes;

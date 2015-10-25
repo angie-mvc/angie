@@ -17,9 +17,11 @@ import $LogProvider from            'angie-log';
 import $$createProject from         './util/scaffold/project';
 import {
     $$watch,
+    $$cluster,
     $$server
 } from                              './Server';
 
+const t = s => s.toString().replace(/\s{2,}/g, '');
 let args = [];
 
 // Remove trivial arguments
@@ -32,9 +34,10 @@ process.argv.forEach(function(v) {
 if (argv.help || argv.h) {
     help();
 } else {
+    let main = (args[0] || argv._).toLowerCase();
 
     // Route the CLI request to a specific command
-    switch ((args[0] || '').toLowerCase()) {
+    switch (main) {
         case 'help':
             help();
             break;
@@ -48,6 +51,7 @@ if (argv.help || argv.h) {
             $$server(args);
             break;
         case 'cluster':
+            $$cluster();
             break;
         case 'createproject':
             $$createProject({
@@ -100,36 +104,35 @@ function help() {
     BOLD('Commands:');
 
     console.log('angie server [-p=<port>] [--port=<port>] [--usessl]');
-    GRAY(
-        'Start the Angie Webserver (shortcut with s). Default port ' +
-        'is 3000. "usessl" forces the port to 443.'
-    );
+    GRAY(t`
+        Start the Angie Webserver (shortcut with s). Default port
+        is 3000. "usessl" forces the port to 443.
+    `);
 
     console.log(
         'angie watch [-p=<port>] [--port=<port>] [-d] [--devmode] [--usessl]'
     );
-    GRAY(
-        'Starts the Angie Webserver as a watched process and watches the ' +
-        'project directory. If started in "devmode," watch will target ' +
-        'the Angie module "src" directory'
-    );
+    GRAY(t`
+        Starts the Angie Webserver as a watched process and watches the
+        project directory. If started in "devmode," watch will target
+        the Angie module "src" directory
+    `);
 
-    // TODO cluster help item
-    // console.log('cluster [-p=<port>] [--port=<port>]');
-    // gray('Start the Angie Webserver as a Cluster.');
+    console.log('cluster [-p=<port>] [--port=<port>] [--usessl] [--norefork]');
+    GRAY(t`
+        Start the Angie Webserver as a cluster of forked webserver processes.
+        Unless \`--norefork\` option is passed, forks will respawn on exit
+    `);
 
     console.log('angie project [-n=<name>][--name=<name>] [--dir=<directory>]');
     console.log(
         'angie createproject [-n=<name>][--name=<name>] [--dir=<directory>]'
     );
-    GRAY(
-        'Create a new Angie project with the specified name in the ' +
-        'current directory.'
-    );
+    GRAY(t`
+        Create a new Angie project with the specified name in the
+        current directory.
+    `);
 
     console.log('angie test');
-    GRAY(
-        'Runs the Angie test suite and prints the results in the ' +
-        'console'
-    );
+    GRAY('Runs the Angie test suite and prints the results in the console');
 }

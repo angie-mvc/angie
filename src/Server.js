@@ -5,10 +5,12 @@
  */
 
 // System Modules
-import { argv } from                    'yargs';
+import os from                          'os';
+import cluster from                     'cluster';
 import repl from                        'repl';
 import http from                        'http';
 import https from                       'https';
+import { argv } from                    'yargs';
 import { Client } from                  'fb-watchman';
 import { cyan } from                    'chalk';
 import $Injector from                   'angie-injector';
@@ -160,6 +162,49 @@ function $$shell() {
 }
 
 /**
+ * @desc $$cluster forks the standard webserver process allowing for many child
+ * forks of the webserver to spin up. This is based on the native NodeJS cluster
+ * module, which will spin up a new process for each of the CPUs on the host
+ * machine.
+ *
+ * The master/child for cluster is self-forking by default. This insures that if
+ * a fork goes down, the master will spin a new child fork up automatically,
+ * allowing for more application resiliency. This may make it difficult to
+ * restart the entire process as default shell exit commands will not take down
+ * all of the forks.
+ *
+ * It is not recommended to use cluster in development.
+ * @todo With binding and sockets, one must make sure that the clustered app
+ * listens across all of it's listeners and clients broadcast to a broker or
+ * all of the children
+ * @since 0.4.5
+ * @access private
+ */
+function $$cluster() {
+    if (cluster.isMaster) {
+        $LogProvider.info(
+            `Starting ${cyan('cluster')} on ${os.cpus().length} core(s)`
+        );
+
+        if (config.development === true) {
+            $LogProvider.warn(
+                `It is not recommended to use ${cyan('cluster')} in development`
+            );
+        }
+
+        os.cpus().forEach(cluster.fork);
+
+        // We only want to refork if the user has not explicitly set the
+        // `--no-refork` option
+        if (!argv.hasOwnProperty('norefork')) {
+            cluster.on('exit', cluster.fork);
+        }
+    } else {
+        $$server();
+    }
+}
+
+/**
  * @desc $$server uses the NodeJS http/https to open an Angie-based web server
  *
  * Before load, the $$server command will load all file dependencies of the
@@ -300,6 +345,7 @@ function $$port(args) {
 
 export {
     $$watch,
+    $$cluster,
     $$server,
 
     // Exposed for testing purposes

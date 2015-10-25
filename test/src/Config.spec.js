@@ -8,7 +8,7 @@ import $LogProvider from        'angie-log';
 
 // Angie Modules
 const TEST_ENV =                global.TEST_ENV || 'src',
-    $FileUtil =                 require(`../../${TEST_ENV}/util/Util`).$FileUtil,
+    $FileUtil =                 require(`../../${TEST_ENV}/util/util`).$FileUtil,
     $Config =                   require(`../../${TEST_ENV}/Config`),
     Config =                    $Config.default,
     config =                    $Config.config;
